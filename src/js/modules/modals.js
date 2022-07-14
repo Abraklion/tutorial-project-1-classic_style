@@ -1,10 +1,20 @@
 const modals = () => {
 
+  // МОДУЛЬ ДЛЯ РАБОТЫ С МОДАЛЬНЫМИ ОКНАМИ
+
   function bindModal(triggerSelector, modalSelector, closeSelector) {
 
-    const trigger = document.querySelectorAll(triggerSelector), // селектор который открывает модальное окно
-      modal = document.querySelector(modalSelector), // модальное окно которое мы будем открывать
-      close = document.querySelector(closeSelector); // селектор который закрывает модальное окно
+    /* *
+    *
+    * triggerSelector -> селектор который открывает модальное окно
+    * modalSelector   -> селектор модального окна которое мы будем открывать
+    * closeSelector   -> селектор который закрывает модальное окно
+    *
+    * */
+
+    const trigger = document.querySelectorAll(triggerSelector),
+      modal = document.querySelector(modalSelector),
+      close = document.querySelector(closeSelector);
 
     trigger.forEach(item => {
       item.addEventListener('click', (e) => {
