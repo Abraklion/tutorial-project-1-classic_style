@@ -15151,6 +15151,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _slider__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./slider */ "./src/js/slider.js");
 /* harmony import */ var _modules_modals__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/modals */ "./src/js/modules/modals.js");
 /* harmony import */ var _modules_tabs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/tabs */ "./src/js/modules/tabs.js");
+/* harmony import */ var _modules_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/forms */ "./src/js/modules/forms.js");
+
 
 
 
@@ -15158,7 +15160,87 @@ document.addEventListener('DOMContentLoaded', () => {
   Object(_modules_modals__WEBPACK_IMPORTED_MODULE_1__["default"])();
   Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.glazing_slider ', '.glazing_block', '.glazing_content', 'active');
   Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.decoration_slider', '.no_click', '.decoration_content > div > div', 'after_click');
+  Object(_modules_forms__WEBPACK_IMPORTED_MODULE_3__["default"])();
 });
+
+/***/ }),
+
+/***/ "./src/js/modules/forms.js":
+/*!*********************************!*\
+  !*** ./src/js/modules/forms.js ***!
+  \*********************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.string.replace */ "./node_modules/core-js/modules/es.string.replace.js");
+/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_0__);
+
+
+const forms = () => {
+  /* *
+  *
+  * МОДУЛЬ ДЛЯ РАБОТЫ С ФОРМАМИ
+  *
+  * form          -> все формы на сайте
+  * phoneInputs   -> input с телефоном
+  *
+  * */
+  const form = document.querySelectorAll('form'),
+        phoneInputs = document.querySelectorAll('input[name="user_phone"]');
+  phoneInputs.forEach(item => {
+    // в input с телефоном можно писать только цифры
+    item.addEventListener('input', () => {
+      item.value = item.value.replace(/\D/, '');
+    });
+  });
+  const message = {
+    loading: 'Загрузка...',
+    success: 'Спасибо! Скоро мы с вами свяжемся',
+    failure: 'Что-то пошло не так...'
+  };
+
+  const postData = async (url, data) => {
+    // асинхронный запрос к серверу
+    document.querySelector('.status').textContent = message.loading;
+    let res = await fetch(url, {
+      method: "POST",
+      body: data
+    });
+    return await res.text();
+  };
+
+  const clearForm = () => {
+    // сбрасываем данные формы
+    form.forEach(item => {
+      item.reset();
+    });
+  };
+
+  form.forEach(item => {
+    item.addEventListener('submit', e => {
+      e.preventDefault();
+      let statusMessage = document.createElement('div');
+      statusMessage.classList.add('status');
+      item.appendChild(statusMessage);
+      const formData = new FormData(item);
+      postData('assets/server.php', formData).then(res => {
+        console.log(res);
+        statusMessage.textContent = message.success;
+      }).catch(() => {
+        statusMessage.textContent = message.failure;
+      }).finally(() => {
+        clearForm();
+        setTimeout(() => {
+          statusMessage.remove();
+        }, 5000);
+      });
+    });
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (forms);
 
 /***/ }),
 
