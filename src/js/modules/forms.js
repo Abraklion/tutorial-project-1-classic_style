@@ -1,26 +1,21 @@
-const forms = () => {
 
-  /* *
+import checkNumInputs from './checkNumInputs';
+
+const forms = (state) => {
+
+  /**
   *
   * МОДУЛЬ ДЛЯ РАБОТЫ С ФОРМАМИ
   *
   * form          -> все формы на сайте
   * phoneInputs   -> input с телефоном
   *
-  * */
+  */
 
   const form = document.querySelectorAll('form'),
-    phoneInputs = document.querySelectorAll('input[name="user_phone"]');
+        inputs = document.querySelectorAll('input');
 
-
-  phoneInputs.forEach(item => {
-    // в input с телефоном можно писать только цифры
-
-    item.addEventListener('input', () => {
-      item.value = item.value.replace(/\D/, '');
-    });
-
-  });
+  checkNumInputs('input[name="user_phone"]');
 
   const message = {
     loading: 'Загрузка...',
@@ -41,11 +36,11 @@ const forms = () => {
 
   };
 
-  const clearForm = () => {
+  const clearInputs = () => {
     // сбрасываем данные формы
 
-    form.forEach(item => {
-      item.reset();
+    inputs.forEach(item => {
+      item.value = '';
     });
 
   };
@@ -59,6 +54,13 @@ const forms = () => {
       item.appendChild(statusMessage);
 
       const formData = new FormData(item);
+
+      // надстройка для формы калькулятора
+      if (item.getAttribute('data-calc') === "end") {
+        for (let key in state) {
+          formData.append(key, state[key]);
+        }
+      }
 
       postData('assets/server.php', formData)
         .then(res => {
@@ -74,10 +76,25 @@ const forms = () => {
         })
         .finally(() => {
 
-          clearForm();
+          clearInputs();
 
           setTimeout(() => {
             statusMessage.remove();
+
+            // надстройка для формы калькулятора
+            if (item.getAttribute('data-calc') === "end" ) {
+
+              // закрыть модальное окно
+              item.closest('.popup_calc_end').style.display = "none"
+              document.body.style.overflow = "";
+
+              // очистить объект modalState
+              Object.keys(state).forEach(prop => {
+                delete state[prop]
+              })
+
+            }
+
           }, 5000);
 
         });

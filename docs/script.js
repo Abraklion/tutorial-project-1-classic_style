@@ -15152,16 +15152,138 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_modals__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/modals */ "./src/js/modules/modals.js");
 /* harmony import */ var _modules_tabs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/tabs */ "./src/js/modules/tabs.js");
 /* harmony import */ var _modules_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/forms */ "./src/js/modules/forms.js");
+/* harmony import */ var _modules_changeModalState__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./modules/changeModalState */ "./src/js/modules/changeModalState.js");
+
 
 
 
 
 document.addEventListener('DOMContentLoaded', () => {
+  "use strict";
+
+  let modalState = {};
+  Object(_modules_changeModalState__WEBPACK_IMPORTED_MODULE_4__["default"])(modalState);
   Object(_modules_modals__WEBPACK_IMPORTED_MODULE_1__["default"])();
   Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.glazing_slider ', '.glazing_block', '.glazing_content', 'active');
   Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.decoration_slider', '.no_click', '.decoration_content > div > div', 'after_click');
-  Object(_modules_forms__WEBPACK_IMPORTED_MODULE_3__["default"])();
+  Object(_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.balcon_icons', '.balcon_icons_img', '.big_img > img', 'do_image_more', 'inline-block');
+  Object(_modules_forms__WEBPACK_IMPORTED_MODULE_3__["default"])(modalState);
+  console.log(modalState);
 });
+
+/***/ }),
+
+/***/ "./src/js/modules/changeModalState.js":
+/*!********************************************!*\
+  !*** ./src/js/modules/changeModalState.js ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _checkNumInputs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./checkNumInputs */ "./src/js/modules/checkNumInputs.js");
+
+
+const changeModalState = state => {
+  /**
+  *
+  * МОДУЛЬ ДЛЯ СОБИРА ДАННЫХ ОТ ПОЛЬЗОВАТЕЛЯ ПРИ ЕГО ВЗАИМОДЕЙСТВИИ С САЙТОМ
+  * (данные собираются для передачи с форму)
+  *
+  * windowForm     -> форма окна
+  * windowWidth    -> ширина окна
+  * windowHeight   -> высота окна
+  * windowType     -> тип окна
+  * windowType     -> профиль окна
+  *
+  * */
+  const windowForm = document.querySelectorAll('.balcon_icons_img'),
+        windowWidth = document.querySelectorAll('#width'),
+        windowHeight = document.querySelectorAll('#height'),
+        windowType = document.querySelectorAll('#view_type'),
+        windowProfile = document.querySelectorAll('.checkbox');
+  Object(_checkNumInputs__WEBPACK_IMPORTED_MODULE_0__["default"])('#width');
+  Object(_checkNumInputs__WEBPACK_IMPORTED_MODULE_0__["default"])('#height');
+
+  function bindActionToElems(event, elem, prop) {
+    /**
+    *
+    * event   -> тип события
+    * elem    -> элемент(узел) к которому применяется события
+    * prop    -> названия свойства как текст поторое запишится как ключ в обьект state(произвольно по смыслу)
+    *
+    */
+    elem.forEach((item, i) => {
+      item.addEventListener(event, () => {
+        switch (item.nodeName) {
+          case 'SPAN':
+            state[prop] = i;
+            break;
+
+          case 'INPUT':
+            if (item.getAttribute('type') === 'checkbox') {
+              i === 0 ? state[prop] = "Холодное" : state[prop] = "Теплое";
+              elem.forEach((box, j) => {
+                box.checked = false;
+
+                if (i === j) {
+                  box.checked = true;
+                }
+              });
+            } else {
+              state[prop] = item.value;
+            }
+
+            break;
+
+          case 'SELECT':
+            state[prop] = item.value;
+            break;
+        }
+
+        console.log(state);
+      });
+    });
+  }
+
+  bindActionToElems('click', windowForm, 'form');
+  bindActionToElems('input', windowHeight, 'height');
+  bindActionToElems('input', windowWidth, 'width');
+  bindActionToElems('change', windowType, 'type');
+  bindActionToElems('change', windowProfile, 'profile');
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (changeModalState);
+
+/***/ }),
+
+/***/ "./src/js/modules/checkNumInputs.js":
+/*!******************************************!*\
+  !*** ./src/js/modules/checkNumInputs.js ***!
+  \******************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.string.replace */ "./node_modules/core-js/modules/es.string.replace.js");
+/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_0__);
+
+
+const checkNumInputs = selector => {
+  /**
+   * в input с телефоном можно писать только цифры
+   */
+  const numInputs = document.querySelectorAll(selector);
+  numInputs.forEach(item => {
+    item.addEventListener('input', () => {
+      item.value = item.value.replace(/\D/, '');
+    });
+  });
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (checkNumInputs);
 
 /***/ }),
 
@@ -15174,27 +15296,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core-js/modules/es.string.replace */ "./node_modules/core-js/modules/es.string.replace.js");
-/* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _checkNumInputs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./checkNumInputs */ "./src/js/modules/checkNumInputs.js");
 
 
-const forms = () => {
-  /* *
+const forms = state => {
+  /**
   *
   * МОДУЛЬ ДЛЯ РАБОТЫ С ФОРМАМИ
   *
   * form          -> все формы на сайте
   * phoneInputs   -> input с телефоном
   *
-  * */
+  */
   const form = document.querySelectorAll('form'),
-        phoneInputs = document.querySelectorAll('input[name="user_phone"]');
-  phoneInputs.forEach(item => {
-    // в input с телефоном можно писать только цифры
-    item.addEventListener('input', () => {
-      item.value = item.value.replace(/\D/, '');
-    });
-  });
+        inputs = document.querySelectorAll('input');
+  Object(_checkNumInputs__WEBPACK_IMPORTED_MODULE_0__["default"])('input[name="user_phone"]');
   const message = {
     loading: 'Загрузка...',
     success: 'Спасибо! Скоро мы с вами свяжемся',
@@ -15211,10 +15327,10 @@ const forms = () => {
     return await res.text();
   };
 
-  const clearForm = () => {
+  const clearInputs = () => {
     // сбрасываем данные формы
-    form.forEach(item => {
-      item.reset();
+    inputs.forEach(item => {
+      item.value = '';
     });
   };
 
@@ -15224,16 +15340,33 @@ const forms = () => {
       let statusMessage = document.createElement('div');
       statusMessage.classList.add('status');
       item.appendChild(statusMessage);
-      const formData = new FormData(item);
+      const formData = new FormData(item); // надстройка для формы калькулятора
+
+      if (item.getAttribute('data-calc') === "end") {
+        for (let key in state) {
+          formData.append(key, state[key]);
+        }
+      }
+
       postData('assets/server.php', formData).then(res => {
         console.log(res);
         statusMessage.textContent = message.success;
       }).catch(() => {
         statusMessage.textContent = message.failure;
       }).finally(() => {
-        clearForm();
+        clearInputs();
         setTimeout(() => {
-          statusMessage.remove();
+          statusMessage.remove(); // надстройка для формы калькулятора
+
+          if (item.getAttribute('data-calc') === "end") {
+            // закрыть модальное окно
+            item.closest('.popup_calc_end').style.display = "none";
+            document.body.style.overflow = ""; // очистить объект modalState
+
+            Object.keys(state).forEach(prop => {
+              delete state[prop];
+            });
+          }
         }, 5000);
       });
     });
@@ -15254,41 +15387,57 @@ const forms = () => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 const modals = () => {
-  // МОДУЛЬ ДЛЯ РАБОТЫ С МОДАЛЬНЫМИ ОКНАМИ
-  function bindModal(triggerSelector, modalSelector, closeSelector) {
-    /* *
+  /**
+   * МОДУЛЬ ДЛЯ РАБОТЫ С МОДАЛЬНЫМИ ОКНАМИ
+   */
+  function bindModal(triggerSelector, modalSelector, closeSelector, closeClickOverlay = true) {
+    /**
     *
-    * triggerSelector -> селектор который открывает модальное окно
-    * modalSelector   -> селектор модального окна которое мы будем открывать
-    * closeSelector   -> селектор который закрывает модальное окно
+    * triggerSelector     -> селектор который открывает модальное окно
+    * modalSelector       -> селектор модального окна которое мы будем открывать
+    * closeSelector       -> селектор который закрывает модальное окно
+    * closeClickOverlay   -> буливо значения, можно ли скрывать модальне окно по клику подложку
     *
-    * */
+    */
     const trigger = document.querySelectorAll(triggerSelector),
           modal = document.querySelector(modalSelector),
-          close = document.querySelector(closeSelector);
+          close = document.querySelector(closeSelector),
+          windows = document.querySelectorAll('[data-modal]');
+
+    const hideAllModals = () => {
+      // скрывает все модальные окна
+      windows.forEach(item => {
+        item.style.display = 'none';
+      });
+    };
+
     trigger.forEach(item => {
       item.addEventListener('click', e => {
         if (e.target) {
           e.preventDefault();
         }
 
+        hideAllModals();
         modal.style.display = "block";
         document.body.style.overflow = "hidden"; // document.body.classList.add('modal-open'); // класс из bootstrap
       });
     });
     close.addEventListener('click', () => {
+      hideAllModals();
       modal.style.display = "none";
       document.body.style.overflow = ""; // document.body.classList.remove('modal-open'); // класс из bootstrap
     });
     modal.addEventListener('click', e => {
-      if (e.target === modal) {
+      if (e.target === modal && closeClickOverlay) {
+        hideAllModals();
         modal.style.display = "none";
-        document.body.style.overflow = ""; // document.body.classList.remove('modal-open');
+        document.body.style.overflow = ""; // document.body.classList.remove('modal-open'); // класс из bootstrap
       }
     });
   }
 
   function showModalByTime(selector, time) {
+    // показывает интересующию нас модалку через определенное время
     setTimeout(function () {
       document.querySelector(selector).style.display = 'block';
       document.body.style.overflow = "hidden";
@@ -15296,7 +15445,10 @@ const modals = () => {
   }
 
   bindModal('.popup_engineer_btn', '.popup_engineer', '.popup_engineer .popup_close');
-  bindModal('.phone_link', '.popup', '.popup .popup_close'); // showModalByTime('.popup', 60000);
+  bindModal('.phone_link', '.popup', '.popup .popup_close');
+  bindModal('.popup_calc_btn', '.popup_calc', '.popup_calc_close');
+  bindModal('.popup_calc_button', '.popup_calc_profile', '.popup_calc_profile_close', false);
+  bindModal('.popup_calc_profile_button', '.popup_calc_end', '.popup_calc_end_close', false); // showModalByTime('.popup', 60000);
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (modals);
@@ -15316,8 +15468,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace__WEBPACK_IMPORTED_MODULE_0__);
 
 
-const tabs = (headerSelector, tabSelector, contentSelector, activeClass) => {
-  /* *
+const tabs = (headerSelector, tabSelector, contentSelector, activeClass, display = 'block') => {
+  /**
   *
   * МОДУЛЬ ДЛЯ РАБОТЫ С ТАБАМИ
   *
@@ -15326,7 +15478,7 @@ const tabs = (headerSelector, tabSelector, contentSelector, activeClass) => {
   * tabSelector    -> селектор описание табов
   * activeClass    -> класс активности
   *
-  * */
+  */
   const header = document.querySelector(headerSelector),
         tab = document.querySelectorAll(tabSelector),
         content = document.querySelectorAll(contentSelector);
@@ -15341,7 +15493,7 @@ const tabs = (headerSelector, tabSelector, contentSelector, activeClass) => {
   }
 
   function showTabContent(i = 0) {
-    content[i].style.display = 'block';
+    content[i].style.display = display;
     tab[i].classList.add(activeClass);
   }
 

@@ -1,6 +1,6 @@
-const tabs = (headerSelector, tabSelector, contentSelector, activeClass) => {
+const tabs = (headerSelector, tabSelector, contentSelector, activeClass, display='block') => {
 
-  /* *
+  /**
   *
   * МОДУЛЬ ДЛЯ РАБОТЫ С ТАБАМИ
   *
@@ -9,7 +9,7 @@ const tabs = (headerSelector, tabSelector, contentSelector, activeClass) => {
   * tabSelector    -> селектор описание табов
   * activeClass    -> класс активности
   *
-  * */
+  */
 
   const header = document.querySelector(headerSelector),
     tab = document.querySelectorAll(tabSelector),
@@ -26,7 +26,7 @@ const tabs = (headerSelector, tabSelector, contentSelector, activeClass) => {
   }
 
   function showTabContent(i = 0) {
-    content[i].style.display = 'block';
+    content[i].style.display = display;
     tab[i].classList.add(activeClass);
   }
 
