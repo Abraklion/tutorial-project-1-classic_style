@@ -1,3 +1,5 @@
+import {calcScroll} from "./calcScroll";
+
 const images = () => {
 
   /**
@@ -38,12 +40,14 @@ const images = () => {
       bigImage.setAttribute('src', path);
 
       document.body.style.overflow = "hidden";
+      document.body.style.marginRight = `${document.documentElement.offsetWidth > 991 ? calcScroll() : 0}px`;
     }
 
     if (target && target.matches('div.popup')) {
       imgPopup.style.display = 'none';
 
       document.body.style.overflow = "";
+      document.body.style.marginRight = `0px`;
     }
   });
 };

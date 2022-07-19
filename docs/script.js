@@ -15179,6 +15179,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /***/ }),
 
+/***/ "./src/js/modules/calcScroll.js":
+/*!**************************************!*\
+  !*** ./src/js/modules/calcScroll.js ***!
+  \**************************************/
+/*! exports provided: calcScroll */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "calcScroll", function() { return calcScroll; });
+const calcScroll = () => {
+  /**
+   * ширина скролла прокрутки
+   */
+  let div = document.createElement('div');
+  div.style.width = '50px';
+  div.style.height = '50px';
+  div.style.overflowY = 'scroll';
+  div.style.visibility = 'hidden';
+  document.body.appendChild(div);
+  let scrollWidth = div.offsetWidth - div.clientWidth;
+  div.remove();
+  return scrollWidth;
+};
+
+/***/ }),
+
 /***/ "./src/js/modules/changeModalState.js":
 /*!********************************************!*\
   !*** ./src/js/modules/changeModalState.js ***!
@@ -15392,6 +15419,9 @@ const forms = state => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _calcScroll__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./calcScroll */ "./src/js/modules/calcScroll.js");
+
+
 const images = () => {
   /**
    *
@@ -15423,11 +15453,13 @@ const images = () => {
       const path = target.parentNode.getAttribute('href');
       bigImage.setAttribute('src', path);
       document.body.style.overflow = "hidden";
+      document.body.style.marginRight = `${document.documentElement.offsetWidth > 991 ? Object(_calcScroll__WEBPACK_IMPORTED_MODULE_0__["calcScroll"])() : 0}px`;
     }
 
     if (target && target.matches('div.popup')) {
       imgPopup.style.display = 'none';
       document.body.style.overflow = "";
+      document.body.style.marginRight = `0px`;
     }
   });
 };
@@ -15445,6 +15477,9 @@ const images = () => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _calcScroll__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./calcScroll */ "./src/js/modules/calcScroll.js");
+
+
 const modals = () => {
   /**
    * МОДУЛЬ ДЛЯ РАБОТЫ С МОДАЛЬНЫМИ ОКНАМИ
@@ -15461,7 +15496,8 @@ const modals = () => {
     const trigger = document.querySelectorAll(triggerSelector),
           modal = document.querySelector(modalSelector),
           close = document.querySelector(closeSelector),
-          windows = document.querySelectorAll('[data-modal]');
+          windows = document.querySelectorAll('[data-modal]'),
+          scroll = document.documentElement.offsetWidth > 991 ? Object(_calcScroll__WEBPACK_IMPORTED_MODULE_0__["calcScroll"])() : 0;
 
     const hideAllModals = () => {
       // скрывает все модальные окна
@@ -15478,19 +15514,22 @@ const modals = () => {
 
         hideAllModals();
         modal.style.display = "block";
-        document.body.style.overflow = "hidden"; // document.body.classList.add('modal-open'); // класс из bootstrap
+        document.body.style.overflow = "hidden";
+        document.body.style.marginRight = `${scroll}px`; // document.body.classList.add('modal-open'); // класс из bootstrap
       });
     });
     close.addEventListener('click', () => {
       hideAllModals();
       modal.style.display = "none";
-      document.body.style.overflow = ""; // document.body.classList.remove('modal-open'); // класс из bootstrap
+      document.body.style.overflow = "";
+      document.body.style.marginRight = `0px`; // document.body.classList.remove('modal-open'); // класс из bootstrap
     });
     modal.addEventListener('click', e => {
       if (e.target === modal && closeClickOverlay) {
         hideAllModals();
         modal.style.display = "none";
-        document.body.style.overflow = ""; // document.body.classList.remove('modal-open'); // класс из bootstrap
+        document.body.style.overflow = "";
+        document.body.style.marginRight = `0px`; // document.body.classList.remove('modal-open'); // класс из bootstrap
       }
     });
   }

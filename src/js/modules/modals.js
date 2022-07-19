@@ -1,3 +1,5 @@
+import {calcScroll} from "./calcScroll";
+
 const modals = () => {
 
   /**
@@ -18,7 +20,8 @@ const modals = () => {
     const trigger = document.querySelectorAll(triggerSelector),
       modal = document.querySelector(modalSelector),
       close = document.querySelector(closeSelector),
-      windows = document.querySelectorAll('[data-modal]');
+      windows = document.querySelectorAll('[data-modal]'),
+      scroll = document.documentElement.offsetWidth > 991 ? calcScroll() : 0;
 
     const hideAllModals = () => {
       // скрывает все модальные окна
@@ -39,6 +42,7 @@ const modals = () => {
 
         modal.style.display = "block";
         document.body.style.overflow = "hidden";
+        document.body.style.marginRight = `${scroll}px`;
         // document.body.classList.add('modal-open'); // класс из bootstrap
       });
     });
@@ -48,6 +52,7 @@ const modals = () => {
 
       modal.style.display = "none";
       document.body.style.overflow = "";
+      document.body.style.marginRight = `0px`;
       // document.body.classList.remove('modal-open'); // класс из bootstrap
     });
 
@@ -58,6 +63,7 @@ const modals = () => {
 
         modal.style.display = "none";
         document.body.style.overflow = "";
+        document.body.style.marginRight = `0px`;
         // document.body.classList.remove('modal-open'); // класс из bootstrap
       }
 
