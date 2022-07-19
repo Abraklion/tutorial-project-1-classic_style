@@ -35,3 +35,9 @@ NPM v: 8.11.0
 *Модуль **changeModalState.js** подключаем в **main.js***
 
 *Модифицировал файлы: **modals.js** | **tabs.js** | **forms.js** | **checkNumInputs.js** | **index.html***
+
+---
+
+**Урок 8**: Работа с таймером
+
+*Модуль **timer.js** подключаем в **main.js***
